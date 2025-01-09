@@ -17,3 +17,6 @@
 # Possible changes
 1. MovieDto would not use enum, instead validation on Movie domain class to give feedback on reply
 
+# To run
+1. Ran with IntelliJ Ultimate
+2. No other requirements found

@@ -17,9 +17,9 @@ public interface MovieService {
 
     List<MovieDto> findByDate(LocalDate date);
 
-    Optional<MovieDto> findByName(MovieDto movie);
+    Optional<MovieDto> findByName(String title);
 
-    Optional<MovieDto> findById(MovieDto movie);
+    Optional<MovieDto> findById(Long id);
 
     Optional<MovieDto> createMovie(MovieDto movieDto);
 

@@ -26,18 +26,31 @@ public class MovieController {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping ("/all")
     public ResponseEntity<List<MovieDto>> findAll(Pageable pageable){
         return ResponseEntity.ok(service.findAll(pageable));
     }
 
-    @GetMapping("/{date}")
+    @GetMapping("/date/{date}")
     public ResponseEntity<List<MovieDto>> findByDate(@PathVariable LocalDate date){
         List<MovieDto> data = service.findByDate(date);
         if(!data.isEmpty())
             return ResponseEntity.ok(data);
         else
             return ResponseEntity.ok(new ArrayList<>());
+    }
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<MovieDto> findById(@PathVariable Long id){
+        Optional<MovieDto> movieDto = service.findById(id);
+
+        return movieDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatusCode.valueOf(HttpStatus.NO_CONTENT.value())).build());
+    }
+
+    @GetMapping("/title/{title}")
+    public ResponseEntity<MovieDto> findByTitle(@PathVariable String title){
+        Optional<MovieDto> movieDto = service.findByName(title);
+        return movieDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatusCode.valueOf(HttpStatus.NOT_FOUND.value())).build());
     }
 
     @PostMapping

@@ -37,23 +37,27 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Optional<MovieDto> findByName(MovieDto movie) {
-        return Optional.ofNullable(movieRepository.findByTitle(movie.getTitle()).toDto());
+    public Optional<MovieDto> findByName(String title) {
+        return Optional.ofNullable(movieRepository.findByTitle(title).toDto());
     }
 
     @Override
-    public Optional<MovieDto> findById(MovieDto movie) {
-        return Optional.of(movieRepository.findById(movie.getId()).map(Movie::toDto).orElse(new MovieDto()));
+    public Optional<MovieDto> findById(Long id) {
+        return Optional.of(movieRepository.findById(id).map(Movie::toDto).orElse(new MovieDto()));
     }
 
     @Override
     public Optional<MovieDto> createMovie(MovieDto movieDto) {
-        return Optional.of(movieRepository.save(new Movie().fromDto(movieDto))).map(Movie::toDto);
+        Movie movie = new Movie().fromDto(movieDto);
+        if(movie.validateInputs() || movie.getId()!=null) throw new IllegalArgumentException("Validation failure");
+        return Optional.of(movieRepository.save(movie)).map(Movie::toDto);
     }
 
     @Override
-    public Optional<MovieDto> updateMovie(MovieDto movie) {
-        return Optional.of(movieRepository.save(new Movie().fromDto(movie))).map(Movie::toDto);
+    public Optional<MovieDto> updateMovie(MovieDto movieDto) {
+        Movie movie = new Movie().fromDto(movieDto);
+        if(movie.validateInputs()) throw new IllegalArgumentException("Validation failure");
+        return Optional.of(movieRepository.save(movie)).map(Movie::toDto);
     }
 
     @Override

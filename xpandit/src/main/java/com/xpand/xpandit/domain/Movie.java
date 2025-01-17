@@ -9,6 +9,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,13 +37,13 @@ public class Movie {
                 .title(getTitle())
                 .revenue(getRevenue())
                 .date(getDate())
-                .rank(Ranks.valueOf(String.valueOf(getRank())))
+                .rank(getRank())
                 .build();
     }
 
     public Movie fromDto(MovieDto movieDto){
         return Movie.builder().date(movieDto.getDate())
-                .rank(movieDto.getRank().getValue())
+                .rank(movieDto.getRank())
                 .title(movieDto.getTitle())
                 .revenue(movieDto.getRevenue())
                 .id(movieDto.getId())
@@ -50,43 +51,8 @@ public class Movie {
 
     }
 
-    public Long getId() {
-        return id;
+    public boolean validateInputs(){
+        return this.rank > 10 || this.rank < 1 || this.revenue < 0 || this.date == null || this.title == null || this.title.isEmpty();
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public int getRank() {
-        return rank;
-    }
-
-    public void setRank(int rank) {
-        this.rank = rank;
-    }
-
-    public Double getRevenue() {
-        return revenue;
-    }
-
-    public void setRevenue(Double revenue) {
-        this.revenue = revenue;
-    }
 }

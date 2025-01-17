@@ -1,36 +1,28 @@
 package com.xpand.xpandit.controller;
 
-import com.xpand.xpandit.domain.Ranks;
 import com.xpand.xpandit.dto.MovieDto;
-import com.xpand.xpandit.repository.MovieRepository;
-import com.xpand.xpandit.service.MovieService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class MovieControllerTest {
+class MovieControllerTest {
 
     @Mock
-    MovieService movieService;
-    @Mock
     MovieController movieController;
-    @Mock
-    MovieRepository repository;
 
     @Test
     void should_createMovie(){
         MovieDto movieDto = MovieDto.builder()
-                .title("JUst a test")
-                .rank(Ranks.One)
+                .title("Just a test")
+                .rank(1)
                 .date(LocalDate.now())
                 .revenue(1234566D)
                 .build();
@@ -38,5 +30,16 @@ public class MovieControllerTest {
         ResponseEntity<MovieDto> created = movieController.createMovie(movieDto);
 
         assertNotNull(created.getBody());
+    }
+
+    @Test
+    void should_getAllMovies(){
+        assertFalse(Objects.requireNonNull(movieController.findAll(Pageable.unpaged()).getBody()).isEmpty());
+    }
+
+    @Test
+    void should_getMoreThanOneMovieByDate()
+    {
+        assertEquals(2, Objects.requireNonNull(movieController.findByDate(LocalDate.of(2000, 4, 30)).getBody()).size());
     }
 }
